@@ -7,7 +7,7 @@
         <van-button round slot="button" size="small" color="#ccc">获取验证码</van-button>
       </van-field>
       <div class="login_btn">
-        <van-button class="van_button" type="info">登录</van-button>
+        <van-button class="van_button" type="info" @click="haddleLogin">登录</van-button>
       </div>
     </van-cell-group>
   </div>
@@ -26,7 +26,11 @@ export default {
       }
     }
   },
-  components: {}
+  methods: {
+    haddleLogin () {
+
+    }
+  }
 }
 </script>
 

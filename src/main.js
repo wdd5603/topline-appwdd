@@ -7,6 +7,7 @@ import 'vant/lib/index.css'
 import './style/index.less'
 
 Vue.use(Vant)
+
 Vue.config.productionTip = false
 
 new Vue({
