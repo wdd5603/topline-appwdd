@@ -10,3 +10,10 @@ export let login = ({ mobile, code }) => {
     }
   })
 }
+
+export const getUserChannels = () => {
+  return axios({
+    method: 'get',
+    url: '/app/v1_0/user/channels'
+  })
+}
