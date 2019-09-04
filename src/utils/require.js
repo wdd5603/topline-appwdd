@@ -1,6 +1,7 @@
 import axios from 'axios'
 import jsonBigInt from 'json-bigint'
 import store from '@/store'
+// import { localStorage } from '@/utils/localStorage.js'
 
 // 为适应以后的多服务器请求，将axios实例化
 let instance = axios.create({
@@ -13,6 +14,7 @@ let instance = axios.create({
 instance.interceptors.request.use(function (config) {
   // 在发送请求之前做些什么
   const token = store.state.token
+  // const token = localStorage.getItem('user')
   if (token) {
     config.headers.Authorization = `Bearer ${token.token}`
   }

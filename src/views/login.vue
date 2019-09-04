@@ -55,7 +55,6 @@ export default {
         this.isLoading = true
         // 登录成功返回token和fresh_token,需将token存储起来，分别存储在local storage以及vuex，
         let result = (await login(this.user))
-        console.log(result)
         this.$store.commit('setUserToken', result)
         // this.setUserToken(result)
         this.isLoading = false
