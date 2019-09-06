@@ -4,7 +4,7 @@
     <van-cell-group>
       <van-field
         v-model="user.mobile"
-        v-validate="'required'"
+        v-validate="{required:true,regex:'^(1[3-9])\\d{9}$',digits:11}"
         name="mobile"
         placeholder="请输入手机号"
         left-icon="phone-o"
@@ -52,13 +52,18 @@ export default {
     // ...mapMutations(['setUserToken']),
     async haddleLogin () {
       try {
-        this.isLoading = true
-        // 登录成功返回token和fresh_token,需将token存储起来，分别存储在local storage以及vuex，
-        let result = (await login(this.user))
-        this.$store.commit('setUserToken', result)
-        // this.setUserToken(result)
-        this.isLoading = false
-        this.$router.push('/')
+        this.$validator.validate().then(async valid => {
+          if (!valid) {
+            return
+          }
+          this.isLoading = true
+          // 登录成功返回token和fresh_token,需将token存储起来，分别存储在local storage以及vuex，
+          let result = (await login(this.user))
+          this.$store.commit('setUserToken', result)
+          // this.setUserToken(result)
+          this.isLoading = false
+          this.$router.push('/')
+        })
       } catch (error) {
         if (error.response && error.response.status === 400) {
           this.$toast('用户名或密码有误')
@@ -68,10 +73,21 @@ export default {
     }
   },
   created () {
-    // const mobile = {
-    //   required: true
+    const dict = {
+      custom: {
+        mobile: {
+          required: '手机号不可为空',
+          digits: '必须为0-9之间的11位数字',
+          regex: '号码格式不正确'
+        },
+        code: {
+          required: '验证码不可为空'
+        }
+      }
+    }
 
-    // }
+    // or use the instance method
+    this.$validator.localize('custom', dict)
   }
 }
 </script>
