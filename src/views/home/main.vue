@@ -46,34 +46,42 @@
                 <span>{{ item.aut_name }}</span>&nbsp;
                 <span>{{ item.comm_count }}评论</span>&nbsp;
                 <span>{{ item.pubdate | relaTime }}</span>
-                <van-icon name="close" style="float:right" type="primary" @click="showPopup" />
+                <van-icon name="close" style="float:right" @click="showPopup(item)" />
               </template>
             </van-cell>
           </van-list>
         </van-pull-refresh>
       </van-tab>
     </van-tabs>
-    <!-- <channel-edit></channel-edit> -->
-    <more-action></more-action>
+    <channel-edit></channel-edit>
+    <more-action
+      v-if="currentArticle"
+      :article="currentArticle"
+      @moreSuccess="moreSuccess"
+      v-model="showAction"
+    ></more-action>
   </div>
 </template>
 
 <script>
 import { getUserChannels, getUserArticle } from '@/api/login'
 import MoreAction from './component/MoreAction'
-// import channelEdit from './component/channnelEdit'
+import { getItem, setItem } from '@/utils/localStorage'
+import channelEdit from './component/channnelEdit'
 export default {
   name: 'home',
   components: {
-    MoreAction
-    // channelEdit
+    MoreAction,
+    channelEdit
   },
   data () {
     return {
       keyWords: '',
       chaList: [], // 频道列表
       activeIndex: 0, // 当前被点击的频道索引
-      successText: ''
+      successText: '',
+      showAction: false, // 控制更多操作显示与隐藏
+      currentArticle: null
     }
   },
   computed: {
@@ -100,16 +108,26 @@ export default {
         this.currentChannel.finished = true
       }
     },
-    // 获取当前用户频道列表
+    // 获取频道列表
     async getUserCha () {
-      let result = (await getUserChannels()).channels
-      result.forEach(channel => {
+      let channels = []
+      if (this.$store.state.token) {
+        channels = (await getUserChannels()).channels
+      } else {
+        channels = getItem('channel')
+        if (!channels) {
+          let defaultChannels = (await getUserChannels()).channels
+          setItem('channel', defaultChannels)
+          channels = defaultChannels
+        }
+      }
+      channels.forEach(channel => {
         channel.timestamp = null
         channel.articleList = []
         channel.finished = false
         channel.loading = false
       })
-      this.chaList = result
+      this.chaList = channels
     },
     // 下拉刷新
     async onRefresh () {
@@ -122,8 +140,21 @@ export default {
       this.currentChannel.loading = false
       this.successText = `成功加载了${result.results.length}条数据`
     },
-    showPopup () {
+    showPopup (article) {
       this.showAction = true
+      this.currentArticle = article
+    },
+    moreSuccess () {
+      try {
+        this.showAction = false
+        const index = this.currentChannel.articleList.findIndex((article) => {
+          return this.currentArticle.art_id === article.art_id
+        })
+        this.currentChannel.articleList.splice(index, 1)
+        this.$toast('操作成功')
+      } catch (error) {
+        this.$toast('操作失败')
+      }
     }
   },
 
