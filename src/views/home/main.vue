@@ -31,27 +31,49 @@
               v-for="item in currentChannel.articleList"
               :key="item.art_id.toString()"
               :title="item.title"
-            />
+            >
+              <template slot="label">
+                <van-grid v-if="item.cover.type" :border="false" :column-num="3">
+                  <van-grid-item v-for="(image,index) in item.cover.images" :key="image+index">
+                    <van-image lazy-load :src="image" height="100px">
+                      <!-- 加载中提示 -->
+                      <template v-slot:loading>
+                        <van-loading type="spinner" size="20" />
+                      </template>
+                    </van-image>
+                  </van-grid-item>
+                </van-grid>
+                <span>{{ item.aut_name }}</span>&nbsp;
+                <span>{{ item.comm_count }}评论</span>&nbsp;
+                <span>{{ item.pubdate | relaTime }}</span>
+                <van-icon name="close" style="float:right" type="primary" @click="showPopup" />
+              </template>
+            </van-cell>
           </van-list>
         </van-pull-refresh>
       </van-tab>
     </van-tabs>
     <!-- <channel-edit></channel-edit> -->
+    <more-action></more-action>
   </div>
 </template>
 
 <script>
 import { getUserChannels, getUserArticle } from '@/api/login'
+import MoreAction from './component/MoreAction'
 // import channelEdit from './component/channnelEdit'
 export default {
   name: 'home',
+  components: {
+    MoreAction
+    // channelEdit
+  },
   data () {
     return {
       keyWords: '',
       chaList: [], // 频道列表
       activeIndex: 0, // 当前被点击的频道索引
       successText: ''
-
     }
   },
   computed: {
@@ -59,9 +81,6 @@ export default {
       return this.chaList[this.activeIndex]
     }
   },
-  // components: {
-  //   channelEdit
-  // },
   methods: {
     // 获取频道文章列表
     async loadArticles () {
@@ -102,6 +121,9 @@ export default {
       this.currentChannel.articleList.unshift(...result.results)
       this.currentChannel.loading = false
       this.successText = `成功加载了${result.results.length}条数据`
+    },
+    showPopup () {
+      this.showAction = true
     }
   },
 

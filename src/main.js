@@ -2,10 +2,15 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
-import Vant from 'vant'
+import Vant, { Lazyload } from 'vant'
 import veeValidate from 'vee-validate'
 import 'vant/lib/index.css'
 import '@/style/index.less'
+import { relaTime } from '@/utils/dayjs'
+
+Vue.filter('relaTime', relaTime)
+// options 为可选参数，无则不传
+Vue.use(Lazyload)
 
 Vue.use(Vant)
 Vue.use(veeValidate)
