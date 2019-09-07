@@ -104,8 +104,7 @@ export default {
         this.$toast('操作失败')
       }
     }
-  },
-  created () {}
+  }
 }
 </script>
 

@@ -14,6 +14,9 @@
     </van-search>
     <!-- 频道列表 -->
     <van-tabs v-model="activeIndex">
+      <div class="edit_btn" @click="editChannels">
+        <van-icon name="bars" size="large" />
+      </div>
       <van-tab v-for="channel in chaList" :title="channel.name" :key="channel.id">
         <!-- 下拉刷新组件 -->
         <van-pull-refresh
@@ -53,7 +56,7 @@
         </van-pull-refresh>
       </van-tab>
     </van-tabs>
-    <channel-edit></channel-edit>
+    <channel-edit :userChannels="chaList" v-model="editChannelsPanel"></channel-edit>
     <more-action
       v-if="currentArticle"
       :article="currentArticle"
@@ -81,7 +84,8 @@ export default {
       activeIndex: 0, // 当前被点击的频道索引
       successText: '',
       showAction: false, // 控制更多操作显示与隐藏
-      currentArticle: null
+      currentArticle: null,
+      editChannelsPanel: false// 控制编辑频道功能显示与隐藏
     }
   },
   computed: {
@@ -147,7 +151,8 @@ export default {
     moreSuccess () {
       try {
         this.showAction = false
-        const index = this.currentChannel.articleList.findIndex((article) => {
+        this.showAction = false
+        const index = this.currentChannel.articleList.findIndex(article => {
           return this.currentArticle.art_id === article.art_id
         })
         this.currentChannel.articleList.splice(index, 1)
@@ -155,6 +160,10 @@ export default {
       } catch (error) {
         this.$toast('操作失败')
       }
+    },
+    // 点击编辑频道按钮时
+    editChannels () {
+      this.editChannelsPanel = true
     }
   },
 
@@ -184,5 +193,17 @@ export default {
     // margin-bottom: 80px;
     margin-top: 98px;
   }
+}
+.edit_btn {
+  position: fixed;
+  top: 54px;
+  z-index: 30;
+  right: 0;
+  width: 28px;
+  height: 44px;
+  line-height: 44px;
+  background-color: rgba(255, 255, 255, .9);
+  // background-color: red;
+  text-align: center;
 }
 </style>
