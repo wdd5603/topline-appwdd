@@ -40,3 +40,44 @@ export const pullBlackList = (target) => {
 export const feedbackArticle = (target, type) => {
   return axios.post('/app/v1_0/article/reports', { target, type })
 }
+// 获取文章详情
+export const getArticleDetail = (target) => {
+  return axios.get(`/app/v1_0/articles/${target}`)
+}
+
+// 关注用户
+export const fllowingUser = (target) => {
+  return axios.post('/app/v1_0/user/followings', {
+    target
+  })
+}
+// 取消关注用户
+export const unFllowingUser = (target) => {
+  return axios.delete(`/app/v1_0/user/followings/${target}`, {
+    target
+  })
+}
+// 点赞文章
+export const approveArticle = (target) => {
+  return axios.post('/app/v1_0/article/likings', {
+    target
+  })
+}
+// 取消点赞文章
+export const disapprovalArticle = (target) => {
+  return axios.delete(`/app/v1_0/article/likings/${target}`, {
+    target
+  })
+}
+// 不喜欢文章
+export const dislikeArticle = (target) => {
+  return axios.post('/app/v1_0/article/dislikes', {
+    target
+  })
+}
+// 取消不喜欢文章
+export const likeArticle = (target) => {
+  return axios.delete(`/app/v1_0/article/dislikes/${target}`, {
+    target
+  })
+}

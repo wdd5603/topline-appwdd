@@ -34,6 +34,7 @@
               v-for="item in currentChannel.articleList"
               :key="item.art_id.toString()"
               :title="item.title"
+              @click="$router.push({ name:'detail',params:{id:item.art_id} })"
             >
               <template slot="label">
                 <van-grid v-if="item.cover.type" :border="false" :column-num="3">
@@ -49,7 +50,7 @@
                 <span>{{ item.aut_name }}</span>&nbsp;
                 <span>{{ item.comm_count }}评论</span>&nbsp;
                 <span>{{ item.pubdate | relaTime }}</span>
-                <van-icon name="close" style="float:right" @click="showPopup(item)" />
+                <van-icon name="close" style="float:right" @click.stop="showPopup(item)" />
               </template>
             </van-cell>
           </van-list>

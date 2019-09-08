@@ -7,14 +7,23 @@
     close-icon="close"
     :style="{ height: '90%' }"
   >
+  <van-cell icon="cross"/>
     <van-cell :border="false" title="我的频道" size="large">
-      <van-button round type="danger" size="mini">编辑</van-button>
+      <van-button v-show="!isEdit" round type="danger" size="mini" @click="isEdit=!isEdit">编辑</van-button>
+      <van-button v-show="isEdit" round type="danger" size="mini" @click="isEdit=!isEdit">完成</van-button>
     </van-cell>
     <!-- 我的频道列表 -->
     <van-grid :gutter="10">
-      <van-grid-item v-for="channel in userChannels" :key="channel.id" :text="channel.name" />
+      <van-grid-item
+
+        v-for="channel in userChannels"
+        :key="channel.id"
+        :text="channel.name"
+      >
+        <van-icon v-show="isEdit" class="close_icon" slot="icon" name="close"></van-icon>
+      </van-grid-item>
     </van-grid>
-    <van-cell :border="false" title="推荐频道" size="large"/>
+    <van-cell :border="false" title="推荐频道" size="large" />
     <!-- 推荐频道列表 -->
     <van-grid :column-num="5" :gutter="10">
       <van-grid-item v-for="value in 8" :key="value" text="+文字" />
@@ -36,7 +45,7 @@ export default {
   },
   data () {
     return {
-      show: true
+      isEdit: false
     }
   },
   created () {
@@ -45,5 +54,10 @@ export default {
 }
 </script>
 
-<style>
+<style lang="less" scoped>
+  .close_icon {
+    position: absolute;
+    right: -5px;
+    top: -5px;
+  }
 </style>
