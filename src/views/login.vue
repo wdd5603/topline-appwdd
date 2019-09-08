@@ -62,7 +62,8 @@ export default {
           this.$store.commit('setUserToken', result)
           // this.setUserToken(result)
           this.isLoading = false
-          this.$router.push('/')
+          // 用户在未登录状态下操作点赞，关注等功能会提示登录，登录后返回刚才操作的页面
+          this.$router.push(this.$route.query.direct || '/')
         })
       } catch (error) {
         if (error.response && error.response.status === 400) {

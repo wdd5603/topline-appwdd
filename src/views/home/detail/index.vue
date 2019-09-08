@@ -54,6 +54,9 @@ export default {
     // 点赞文章
     // 用户对文章的态度, -1: 无态度，0-不喜欢，1-点赞
     async toAgree () {
+      if (!this.$checkLogin()) {
+        return
+      }
       if (this.article.attitude === 1) {
         await disapprovalArticle(this.article.art_id)
         this.article.attitude = -1
