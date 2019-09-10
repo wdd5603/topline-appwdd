@@ -57,7 +57,7 @@
         </van-pull-refresh>
       </van-tab>
     </van-tabs>
-    <channel-edit :userChannels="chaList" v-model="editChannelsPanel"></channel-edit>
+    <channel-edit @chaEditIndex="chaEditIndex" :userChannels="chaList" :activeIndex="activeIndex" v-model="editChannelsPanel"></channel-edit>
     <more-action
       v-if="currentArticle"
       :article="currentArticle"
@@ -165,6 +165,9 @@ export default {
     // 点击编辑频道按钮时
     editChannels () {
       this.editChannelsPanel = true
+    },
+    chaEditIndex (index) {
+      this.activeIndex = index
     }
   },
 

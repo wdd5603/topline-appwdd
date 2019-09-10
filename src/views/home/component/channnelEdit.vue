@@ -15,7 +15,12 @@
     </van-cell>
     <!-- 我的频道列表 -->
     <van-grid :gutter="10">
-      <van-grid-item v-for="channel in userChannels" :key="channel.id" :text="channel.name">
+      <van-grid-item
+        v-for="(channel,index) in userChannels"
+        :key="channel.id"
+        @click="handleUserClick(index)"
+      >
+      <div slot="text" class="van-grid-item__text" :class="{active:activeIndex===index}">{{channel.name}}</div>
         <!-- 删除我的频道关闭按钮 -->
         <van-icon v-if="isEdit && channel.id !== 0" class="close_icon" slot="icon" name="close"></van-icon>
       </van-grid-item>
@@ -31,6 +36,7 @@
 <script>
 import { allChannels } from '@/api/login'
 export default {
+  name: 'ChannelEdit',
   props: {
     value: {
       type: Boolean,
@@ -38,6 +44,10 @@ export default {
     },
     userChannels: {
       type: Array,
+      required: true
+    },
+    activeIndex: {
+      type: Number,
       required: true
     }
   },
@@ -55,6 +65,13 @@ export default {
       } catch (error) {
         this.$toast.fail('获取数据信息失败')
         // throw error
+      }
+    },
+    handleUserClick (index) {
+      // 在非编辑模式下
+      if (!this.isEdit) {
+        this.$emit('chaEditIndex', index)
+        this.$emit('input', false)
       }
     }
   },
@@ -80,5 +97,8 @@ export default {
   position: absolute;
   right: -5px;
   top: -5px;
+}
+.active {
+  color: red;
 }
 </style>
