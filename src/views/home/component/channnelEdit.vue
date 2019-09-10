@@ -8,20 +8,16 @@
     close-icon="close"
     :style="{ height: '90%' }"
   >
-  <van-cell icon="cross"/>
+    <van-cell icon="cross" />
     <van-cell :border="false" title="我的频道" size="large">
       <van-button v-show="!isEdit" round type="danger" size="mini" @click="isEdit=!isEdit">编辑</van-button>
       <van-button v-show="isEdit" round type="danger" size="mini" @click="isEdit=!isEdit">完成</van-button>
     </van-cell>
     <!-- 我的频道列表 -->
     <van-grid :gutter="10">
-      <van-grid-item
-
-        v-for="channel in userChannels"
-        :key="channel.id"
-        :text="channel.name"
-      >
-        <van-icon v-show="isEdit" class="close_icon" slot="icon" name="close"></van-icon>
+      <van-grid-item v-for="channel in userChannels" :key="channel.id" :text="channel.name">
+        <!-- 删除我的频道关闭按钮 -->
+        <van-icon v-if="isEdit && channel.id !== 0" class="close_icon" slot="icon" name="close"></van-icon>
       </van-grid-item>
     </van-grid>
     <van-cell :border="false" title="推荐频道" size="large" />
@@ -48,7 +44,7 @@ export default {
   data () {
     return {
       isEdit: false,
-      channels: []// 所有频道列表
+      channels: [] // 所有频道列表
     }
   },
   methods: {
@@ -65,10 +61,10 @@ export default {
   computed: {
     recommendChannels () {
       // 获取我的频道的所有频道id
-      const ids = this.userChannels.map((item) => {
+      const ids = this.userChannels.map(item => {
         return item.id
       })
-      return this.channels.filter((channel) => {
+      return this.channels.filter(channel => {
         return !ids.includes(channel.id)
       })
     }
@@ -80,9 +76,9 @@ export default {
 </script>
 
 <style lang="less" scoped>
-  .close_icon {
-    position: absolute;
-    right: -5px;
-    top: -5px;
-  }
+.close_icon {
+  position: absolute;
+  right: -5px;
+  top: -5px;
+}
 </style>
