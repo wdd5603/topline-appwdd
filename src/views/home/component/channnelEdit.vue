@@ -4,6 +4,7 @@
     @input="$emit('input',$event)"
     position="bottom"
     closeable
+    round
     close-icon="close"
     :style="{ height: '90%' }"
   >
@@ -26,12 +27,13 @@
     <van-cell :border="false" title="推荐频道" size="large" />
     <!-- 推荐频道列表 -->
     <van-grid :column-num="5" :gutter="10">
-      <van-grid-item v-for="value in 8" :key="value" text="+文字" />
+      <van-grid-item v-for="channel in recommendChannels" :key="channel.id" :text="channel.name" />
     </van-grid>
   </van-popup>
 </template>
 
 <script>
+import { allChannels } from '@/api/login'
 export default {
   props: {
     value: {
@@ -45,11 +47,34 @@ export default {
   },
   data () {
     return {
-      isEdit: false
+      isEdit: false,
+      channels: []// 所有频道列表
+    }
+  },
+  methods: {
+    // 获取所有频道列表
+    async getAllChannels () {
+      try {
+        this.channels = (await allChannels()).channels
+      } catch (error) {
+        this.$toast.fail('获取数据信息失败')
+        // throw error
+      }
+    }
+  },
+  computed: {
+    recommendChannels () {
+      // 获取我的频道的所有频道id
+      const ids = this.userChannels.map((item) => {
+        return item.id
+      })
+      return this.channels.filter((channel) => {
+        return !ids.includes(channel.id)
+      })
     }
   },
   created () {
-    console.log(this.channels)
+    this.getAllChannels()
   }
 }
 </script>

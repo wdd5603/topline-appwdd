@@ -1,12 +1,12 @@
 <template>
   <div>
-    <van-nav-bar fixed left-text="返回" left-arrow>
+    <van-nav-bar fixed left-text="返回" left-arrow @click-left="$router.push('/')">
       <van-icon name="ellipsis" slot="right" />
     </van-nav-bar>
     <h3 class="title">{{ article.title }}</h3>
     <!-- 作者信息 -->
     <author-info :article="article"></author-info>
-    <p v-html="article.content" style="padding:15px"></p>
+    <p v-html="article.content" style="padding:15px" class="article"></p>
     <van-row type="flex" justify="space-around">
       <van-col span="6">
         <van-button
@@ -78,5 +78,13 @@ export default {
 }
 .agree {
   color: red;
+}
+.article {
+  word-break: break-all;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+  margin-top: 92px;
+  padding: 0px 20px;
+  margin-bottom: 124px;
 }
 </style>

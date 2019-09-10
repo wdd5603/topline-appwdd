@@ -81,3 +81,7 @@ export const likeArticle = (target) => {
     target
   })
 }
+// 获取所有频道
+export const allChannels = () => {
+  return axios.get('/app/v1_0/channels')
+}

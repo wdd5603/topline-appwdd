@@ -73,7 +73,7 @@ import MoreAction from './component/MoreAction'
 import { getItem, setItem } from '@/utils/localStorage'
 import channelEdit from './component/channnelEdit'
 export default {
-  name: 'home',
+  name: 'HomeList',
   components: {
     MoreAction,
     channelEdit
